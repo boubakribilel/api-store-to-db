@@ -1,4 +1,5 @@
 FROM python:3
+RUN mkdir /app && chmod 777 /app
 ADD __main__.py /app
 ADD requirements.txt /app
 ADD _version.py /app
