@@ -2,7 +2,7 @@ import argparse
 import requests
 import threading
 from pymongo import MongoClient
-
+from pymongo import ReturnDocument
 from _version import __version__
 
 
@@ -28,8 +28,8 @@ def get_bracelet_heartbeat(api_bracelet, collection):
     response = requests.get('http://{}/heartbeat/'.format(api_bracelet) + bracelet_id)
     print(response)
 
-    collection.find_one_and_update({'id': bracelet_id}, {"$push": response.json()}, upsert=True)
-
+    resultat=collection.find_one_and_update({'id': bracelet_id}, {"$push": response.json()}, upsert=True, return_document=ReturnDocument.AFTER)
+    print(resultat)
 
 def main():
     # Define argument parser
@@ -61,7 +61,7 @@ def main():
 
     get_bracelet_footstep(api_bracelet, collection)
     get_bracelet_heartbeat(api_bracelet, collection)
-
+    time.sleep(3600)
 # =====================================
 # MAIN : Entrypoint of the program
 # =====================================
